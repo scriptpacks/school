@@ -1,0 +1,9 @@
+_inventory_list(inv) -> map([range(inventory_size(inv))],
+    inventory_get(inv, _i)
+);
+
+_r_inventory_list(inv) -> (
+    il = {};
+    for(_inventory_list(inv), if(_, il += _));
+    keys(il)
+);

@@ -1,0 +1,83 @@
+import('icons', '_icon_item_json');
+import('array_utils', '_shuffle');
+import('inventory_utils', '_r_inventory_list');
+import('items_utils', '_legit_item_list');
+
+// PRINT
+_polinomio(p) ->
+reduce(
+    p,
+    // SEGNO
+    if(_i || _:0 < 0,
+        _a += if(_:0 < 0, '-', '+')
+    );
+    // NUMERICA
+    _a += abs(_:0);
+    // LETTERALE
+    _a += _icon_item_json(_:1);
+    ,
+    ['']
+);
+
+_r_polinomio(p) ->
+reduce(
+    p,
+    if(_:0 == 0,
+        _a
+    , // else
+        // SEGNO
+        if(_i || _:0 < 0,
+            _a += if(_:0 < 0, '-', '+')
+        );
+        // NUMERICA
+        _a += abs(_:0);
+        // LETTERALE
+        _a += _icon_item_json(_:1);
+        
+    ),
+    ['']
+);
+
+_s_polinomio(p) -> _polinomio(_shuffle(p));
+_s_r_polinomio(p) -> _r_polinomio(_shuffle(p));
+
+// OPERAZIONI
+_riduci_polinomio(p) -> (
+    dic = {};
+    for(p,
+        dic:(_:1) += _:0
+    );
+    map(keys(dic),
+        [dic:_, _]
+    )
+);
+_somma_polinomio(p1, p2) -> [...p1, ...p2];
+_r_somma_polinomio(p1, p2) -> riduci(_somma_polinomio(p1, p2));
+_sottrazione_polinomio(p1, p2) -> _r_somma_polinomio(p1, _opposto_polinomio(p2));
+_r_sottrazione_polinomio(p1, p2) -> _riduci_polinomio(_sottrazione_polinomio(p1, p2));
+_per_polinomio(k, p) -> map(p, [k * _:0, _:1]);
+_opposto_polinomio(p) -> _per_polinomio(-1, p);
+
+// CASUALIZZARE
+_aggiungi_monomio_random_polinomio(p1, max_count) ->
+p1 += [
+    floor(rand(max_count))+1,
+    rand(_legit_item_list())
+];
+_random_polinomio_from_inventory(inv) -> (
+    polinomio = [];
+    loop(rand(2)+1,
+        _aggiungi_monomio_random_polinomio(polinomio, if(!rand(6),-1,1)*(floor(rand(10))+1))
+    );
+    if(il = _r_inventory_list(inv),
+        loop(rand(2)+1,
+            item = rand(il);
+            monomio = [item:1, item:0];
+            polinomio += monomio
+        );
+    );
+    r = rand(polinomio);
+    r:0 = floor(-1^floor(rand(2))*(rand(5)+1));
+    polinomio += r;
+    polinomio
+);

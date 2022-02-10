@@ -1,0 +1,5 @@
+_icon_item_json(item) -> {
+    'translate' -> 'carpet-school.'+item,
+    'font' -> 'carpet-school:icon',
+    'color' -> '#ffffff'
+};

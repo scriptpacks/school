@@ -1,0 +1,7 @@
+_show_text_actionbar(player, text, color) -> (
+    run(str('/title %s actionbar ["",{"text":"%s ","color":"%s"}]',
+        player~'command_name',
+        text,
+        color
+    ))
+);

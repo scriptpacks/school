@@ -1,0 +1,12 @@
+// STREAK
+global_ultima = null;
+global_streak = 1;
+
+_add_streak(valore) -> 
+if(global_ultima == valore,
+    global_streak += 1,
+    global_ultima = valore;
+    global_streak = 1    
+);
+
+_get_streak() -> global_streak;

@@ -1,0 +1,10 @@
+import('array_utils','_remove_match');
+
+global_legit_items_list = _remove_match(item_list(), '_spawn_egg$');
+delete(global_legit_items_list, 0);
+delete(global_legit_items_list, global_legit_items_list~'debug_stick');
+delete(global_legit_items_list, global_legit_items_list~'potion');
+global_legit_items_list = _remove_match(global_legit_items_list, 'command_block');
+global_legit_items_list = _remove_match(global_legit_items_list, '^structure_');
+
+_legit_item_list() -> global_legit_items_list;
