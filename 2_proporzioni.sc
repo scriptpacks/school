@@ -75,22 +75,23 @@ genera_domanda_multipla(player, false, str('/%s risposta ',system_info('app_name
     index = floor(rand(4));
     r = proporzione:index;
     proporzione:index = null;
-    _s_proporzione(proporzione), // domanda
+    _s_proporzione(proporzione)+'\n', // domanda
     if(index == 0,
         r1 = proporzione:1 * proporzione:3 / proporzione:2;
         r2 = proporzione:2 * proporzione:3 / proporzione:1,
-       index == 1;
+       index == 1,
         r1 = proporzione:0 * proporzione:2 / proporzione:3;
         r2 = proporzione:2 * proporzione:3 / proporzione:0,
-       index == 2;
+       index == 2,
         r1 = proporzione:1 * proporzione:3 / proporzione:0;
         r2 = proporzione:0 * proporzione:1 / proporzione:3,
-       index == 3;
+       index == 3,
         r1 = proporzione:0 * proporzione:2 / proporzione:1;
-        r1 = proporzione:0 * proporzione:1 / proporzione:2,
+        r2 = proporzione:0 * proporzione:1 / proporzione:2,
     );
-    if(rand(6), r1 = (floor(rand(25))+1));
-    if(rand(6), r2 = (floor(rand(25))+1));
+    print(str('r1: %d, r2: %d',r1,r2));
+    if(!rand(6), r1 = (floor(rand(25))+1));
+    if(!rand(6), r2 = (floor(rand(25))+1));
     r1 = floor(r1);
     r2 = floor(r2);
     if(r1 == r,
@@ -99,6 +100,7 @@ genera_domanda_multipla(player, false, str('/%s risposta ',system_info('app_name
     while(r2 == r || r2 == r1, 127,
         r2 += if(!rand(2),-1,1)*(floor(rand(10))+1)
     );
+    print(str('r1: %d, r2: %d',r1,r2));
     copy([r,r1,r2]), // risposte
     _(p,r,outer(entity))->_ricompensa(p,r,entity), // ricompensa
     _(p,r,c,outer(entity))->_penalita(p,r,c,entity) // penalità
@@ -124,6 +126,6 @@ __on_statistic(player, category, item, count) ->
 if(category == 'crafted',
     global_item = [item,count];
     if(_valid_time(), 
-        domanda_proporzioni(player);
+        schedule(0, 'domanda_proporzioni', player);
     );
 );
