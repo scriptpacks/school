@@ -29,6 +29,7 @@ __config()->{
 
 _rispondi(int) -> _risposta(player(),int);
 _set_time(100);
+_n_ep(2);
 
 // RICOMPENSA
 _ricompensa(player, r, entity) -> (
@@ -68,7 +69,7 @@ _penalita(player, r, corretta, entity) -> (
     _force_closing_screen(player)
 );
 
-// MONOMI
+// PROPORZIONI
 domanda_proporzioni(player) ->
 genera_domanda_multipla(player, false, str('/%s risposta ',system_info('app_name')),
     proporzione = _proporzione_casuale();
