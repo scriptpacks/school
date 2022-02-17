@@ -1,3 +1,18 @@
+__config()->{
+    'commands'->{
+        'risposta <int>' -> '_rispondi'
+    },
+    'libraries' -> [
+        {'source' -> '/libs/school.scl'},
+        {'source' -> '/libs/countdown.scl'},
+        {'source' -> '/libs/title_utils.scl'},
+        {'source' -> '/libs/array_utils.scl'},
+        {'source' -> '/libs/inventory_utils.scl'},
+        {'source' -> '/libs/items_utils.scl'},
+        {'source' -> '/libs/streak.scl'}
+    ]
+};
+
 import('school',
     'genera_domanda_libera',
     'genera_domanda_multipla',
@@ -17,20 +32,6 @@ import('title_utils','_show_text_actionbar');
 import('inventory_utils','_shuffle_inventory');
 import('items_utils','_r_enchant');
 import('streak','_add_streak','_get_streak');
-
-__config()->{
-    'commands'->{
-        'risposta <int>' -> '_rispondi'
-    },
-    'libraries' -> [
-        {'source' -> '/libs/school.scl'},
-        {'source' -> '/libs/countdown.scl'},
-        {'source' -> '/libs/title_utils.scl'},
-        {'source' -> '/libs/inventory_utils.scl'},
-        {'source' -> '/libs/items_utils.scl'},
-        {'source' -> '/libs/streak.scl'}
-    ]
-};
 
 _rispondi(int) -> _risposta(player(),int);
 _set_time(100);

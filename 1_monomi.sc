@@ -1,3 +1,18 @@
+__config()->{
+    'commands'->{
+        'risposta <int>' -> '_rispondi'
+    },
+    'libraries' -> [
+        {'source' -> '/libs/school.scl'},
+        {'source' -> '/libs/icons.scl'},
+        {'source' -> '/libs/polinomi.scl'},
+        {'source' -> '/libs/countdown.scl'},
+        {'source' -> '/libs/array_utils.scl'},
+        {'source' -> '/libs/title_utils.scl'},
+        {'source' -> '/libs/streak.scl'}
+    ]
+};
+
 import('school',
     'genera_domanda_libera',
     'genera_domanda_multipla',
@@ -21,20 +36,6 @@ import('countdown',
 import('array_utils','_shuffle');
 import('title_utils','_show_text_actionbar');
 import('streak','_add_streak','_get_streak');
-
-__config()->{
-    'commands'->{
-        'risposta <int>' -> '_rispondi'
-    },
-    'libraries' -> [
-        {'source' -> '/libs/school.scl'},
-        {'source' -> '/libs/polinomi.scl'},
-        {'source' -> '/libs/countdown.scl'},
-        {'source' -> '/libs/array_utils.scl'},
-        {'source' -> '/libs/title_utils.scl'},
-        {'source' -> '/libs/streak.scl'}
-    ]
-};
 
 _rispondi(int) -> _risposta(player(),int);
 _set_time(200);
