@@ -1,0 +1,50 @@
+global_primi = [1,2,3,5,7,11,13,17,19,23];
+_proporzione_casuale() -> (
+    rapporto = rand(global_primi);
+    b1 = floor(rand(8))+1;
+    b2 = floor(rand(8))+1;
+    if(b1 == b2, b1 += if(!rand(2),-1,1)*(floor(rand(10))+1));
+    if(b1 == 0, b1 += if(!rand(2),-1,1)*(floor(rand(10))+1));
+    f = [b1, b1*rapporto, b2, b2*rapporto];
+    if(b1*rapporto < 50,
+        f = _perL(floor(rand(5)+1), f);
+    );
+    if(b2*rapporto < 50,
+        f = _perR(floor(rand(5)+1), f);
+    );
+    f
+);
+
+// STAMPA PROPORZIONE
+_proporzione(p) -> _incognita(p:0) + ' : ' + _incognita(p:1) + ' = ' + _incognita(p:2) + ' : ' + _incognita(p:3);
+_s_proporzione(p) -> _proporzione(
+    t = if(rand(2), p, [p:3,p:2,p:1,p:0]);
+    t = if(rand(2), t, [t:1,t:0,t:3,t:2]);
+);
+_incognita(i) -> if(i!=null, str(i), '?');
+
+// OPERAZIONI PROPORZIONI
+_per(k, p) -> _perL(k, _perR(k, p));
+_perL(k, p) -> (
+    p:0 = p:0 * k;
+    p:1 = p:1 * k;
+    p
+);
+_perR(k, p) -> (
+    p:2 = p:2 * k;
+    p:3 = p:3 * k;
+    p
+);
+_semplifica(p) -> _semplificaL(_semplificaR(p));
+_semplificaL(p) -> (
+    mcd = max(1, _mcd(p:0, p:1));
+    p:0 = p:0 / mcd;
+    p:1 = p:1 / mcd;
+    p
+);
+_semplificaL(p) -> (
+    mcd = max(1, _mcd(p:2, p:3));
+    p:2 = p:2 / mcd;
+    p:3 = p:3 / mcd;
+    p
+);

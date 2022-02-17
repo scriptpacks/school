@@ -1,0 +1,22 @@
+import('array_utils', '_shuffle');
+
+_inventory_list(inv) -> map([range(inventory_size(inv))],
+    inventory_get(inv, _i)
+);
+
+_r_inventory_list(inv) -> (
+    il = {};
+    for(_inventory_list(inv), if(_, il += _));
+    keys(il)
+);
+
+_shuffle_inventory(player) -> (
+    inv = _shuffle(inventory_get(player));
+    for(inv,
+        if(_,
+            inventory_set(player, _i, _:1, _:0, _:2),
+        // else
+            inventory_set(player, _i, 0)
+        )
+    )
+)

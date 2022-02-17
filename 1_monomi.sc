@@ -26,7 +26,14 @@ __config()->{
     'commands'->{
         'risposta <int>' -> '_rispondi'
     },
-    'stay_loaded' -> true
+    'libraries' -> [
+        {'source' -> '/libs/school.scl'},
+        {'source' -> '/libs/polinomi.scl'},
+        {'source' -> '/libs/countdown.scl'},
+        {'source' -> '/libs/array_utils.scl'},
+        {'source' -> '/libs/title_utils.scl'},
+        {'source' -> '/libs/streak.scl'}
+    ]
 };
 
 _rispondi(int) -> _risposta(player(),int);

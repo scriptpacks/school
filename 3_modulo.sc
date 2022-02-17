@@ -6,10 +6,6 @@ import('school',
     '_risposta',
     '_unfreeze'
 );
-import('proporzioni',
-    '_s_proporzione',
-    '_proporzione_casuale'
-);
 import('countdown',
     '_start_countdown',
     '_stop_countdown',
@@ -25,7 +21,15 @@ import('streak','_add_streak','_get_streak');
 __config()->{
     'commands'->{
         'risposta <int>' -> '_rispondi'
-    }
+    },
+    'libraries' -> [
+        {'source' -> '/libs/school.scl'},
+        {'source' -> '/libs/countdown.scl'},
+        {'source' -> '/libs/title_utils.scl'},
+        {'source' -> '/libs/inventory_utils.scl'},
+        {'source' -> '/libs/items_utils.scl'},
+        {'source' -> '/libs/streak.scl'}
+    ]
 };
 
 _rispondi(int) -> _risposta(player(),int);

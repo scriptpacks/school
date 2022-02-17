@@ -1,0 +1,19 @@
+// ARRAY UTIL
+_shuffle(l) -> (
+    loop((s=length(l))-1,
+        j = rand(s-_)+_;
+        t = l:_;
+        l:_ = l:j;
+        l:j = t
+    );
+    l
+);
+
+_remove_match(l, match) -> (
+    t = [];
+    for(l,
+        if(_~match == null, t += _)
+    );
+    t
+);
+

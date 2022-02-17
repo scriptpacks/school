@@ -24,7 +24,15 @@ import('streak','_add_streak','_get_streak');
 __config()->{
     'commands'->{
         'risposta <int>' -> '_rispondi'
-    }
+    },
+    'libraries' -> [
+        {'source' -> '/libs/school.scl'},
+        {'source' -> '/libs/proporzioni.scl'},
+        {'source' -> '/libs/countdown.scl'},
+        {'source' -> '/libs/title_utils.scl'},
+        {'source' -> '/libs/inventory_utils.scl'},
+        {'source' -> '/libs/streak.scl'}
+    ]
 };
 
 _rispondi(int) -> _risposta(player(),int);

@@ -1,0 +1,24 @@
+// COUNTDOWN
+global_time = 600;
+global_start_time = system_info('world_time');
+
+_set_time(time) -> global_time = time;
+
+_time() -> global_time+global_start_time-system_info('world_time');
+_valid_time() -> (
+    global_start_time != null && _time() < 0
+);
+_start_countdown(... args) -> (
+    if(args, _set_time(args:0));
+    global_start_time = system_info('world_time');
+);
+_stop_countdown() -> (
+    global_start_time = null;
+);
+
+_countdown_string() -> (
+    if(_time() > -19, floor((_time()+19)/20), '')
+);
+_countup_string(max) -> (
+    if(_time() < 100-max, floor((max+_time()+19)/20), '')
+)
