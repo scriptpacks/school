@@ -762,15 +762,17 @@ call((global_calcolatrice = {
         return
     ),
     'evaluate' -> _() -> (
-        number = number(global_calcolatrice:'display');
-        if(number != null && !global_calcolatrice:'expression_reset',
-            global_calcolatrice:'expression' += number;
-            return = run('script run ' + global_calcolatrice:'expression'):0;
-            global_calcolatrice:'display' = str(return);
+        n = number(global_calcolatrice:'display');
+        if(n != null && !global_calcolatrice:'expression_reset',
+            global_calcolatrice:'expression' += n;
+            return = run('script run ' + global_calcolatrice:'expression'):1:0~'^ \\= (.*) \\(.*\\)$';
+            if((r = number(return)) != null,
+                return = str('%.3f',r)
+            );
+            global_calcolatrice:'display' = lower(str(return));
             global_calcolatrice:'display_reset' = true;
             global_calcolatrice:'expression_reset' = true;
-
-            return, number
+            return, n
         )
     ),
  
@@ -817,9 +819,9 @@ call((global_calcolatrice = {
             'run' -> _() -> call(global_calcolatrice:'evaluate')
         };
         global_calcolatrice:'buttons':48 = {
-            'name' -> ' ',
-            'char' -> ' ',
-            'run' -> _() -> null
+            'name' -> '.',
+            'char' -> '.',
+            'run' -> _() -> call(global_calcolatrice:'digit', '.'),
         };
         global_calcolatrice:null = (_() -> null);
     )
