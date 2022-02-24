@@ -1,0 +1,7 @@
+_mcd(a,b) -> (
+    while(b != 0, 127,
+        [a, b] = [b, a % b];
+    );
+    a
+);
+_mcm(num1,num2) -> num1*num2/_mcd(num1,num2);
