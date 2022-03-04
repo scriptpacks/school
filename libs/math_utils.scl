@@ -5,3 +5,13 @@ _mcd(a,b) -> (
     a
 );
 _mcm(num1,num2) -> num1*num2/_mcd(num1,num2);
+
+global_cifre = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
+_base(n,b) -> (
+    c = if(n==0 || b == 0,'0','');
+    while(n>0 && b > 0, n,
+        c = global_cifre:(n%b) + c;
+        n = floor(n/b);
+    );
+    c
+);
