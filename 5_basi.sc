@@ -3,7 +3,7 @@ __config()->{
         'risposta <int>' -> '_rispondi',
         'decimali <bool>' -> _(b) -> global_decimali = b
     },
-    'resources' -> [
+    'libraries' -> [
         {'source' -> '/libs/school.scl'},
         {'source' -> '/libs/countdown.scl'},
         {'source' -> '/libs/title_utils.scl'},
@@ -35,7 +35,7 @@ import('math_utils','_base');
 import('math','_euclidean');
 
 _rispondi(int) -> _risposta(player(),int);
-_set_time(100);
+_set_time(300);
 _n_ep(5);
 global_calcolatrice = true;
 

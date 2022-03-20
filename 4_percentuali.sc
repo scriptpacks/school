@@ -3,7 +3,7 @@ __config()->{
         'risposta <int>' -> '_rispondi',
         'decimali <bool>' -> _(b) -> global_decimali = b
     },
-    'resources' -> [
+    'libraries' -> [
         {'source' -> '/libs/school.scl'},
         {'source' -> '/libs/countdown.scl'},
         {'source' -> '/libs/title_utils.scl'},

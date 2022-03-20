@@ -2,7 +2,7 @@ __config()->{
     'commands'->{
         'risposta <int>' -> '_rispondi'
     },
-    'resources' -> [
+    'libraries' -> [
         {'source' -> '/libs/school.scl'},
         {'source' -> '/libs/proporzioni.scl'},
         {'source' -> '/libs/countdown.scl'},

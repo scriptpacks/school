@@ -207,7 +207,7 @@ _azioni_calcolatrice(screen, player, action, data) -> (
         call(bottone:'run');
     );
     
-    if(data:'slot' >= 54,
+    if(data:'slot' >= 54 || action == 'throw',
         _apri_domanda(player);
     , action == 'close',
         schedule(0, _(outer(screen),outer(player)) -> if(screen == global_screen && !global_force_closing,
@@ -767,7 +767,7 @@ call((global_calcolatrice = {
             global_calcolatrice:'expression' += n;
             return = run('script run ' + global_calcolatrice:'expression'):1:0~'^ \\= (.*) \\(.*\\)$';
             if((r = number(return)) != null,
-                return = str('%.3f',r)
+                return = reduce(range(4),replace(_a,'[.0]$'),str('%.3f',r))
             );
             global_calcolatrice:'display' = lower(str(return));
             global_calcolatrice:'display_reset' = true;
