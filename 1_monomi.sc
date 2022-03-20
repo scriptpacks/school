@@ -2,7 +2,7 @@ __config()->{
     'commands'->{
         'risposta <int>' -> '_rispondi'
     },
-    'libraries' -> [
+    'resources' -> [
         {'source' -> '/libs/school.scl'},
         {'source' -> '/libs/icons.scl'},
         {'source' -> '/libs/polinomi.scl'},
