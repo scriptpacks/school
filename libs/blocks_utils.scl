@@ -1,0 +1,21 @@
+_surface_block(pos) -> (
+    loop(255,
+        block = block(pos);
+        if(air(block),
+            pos = pos - [0,1,0];
+            continue()
+        );
+        up = block(pos+[0,1,0]);
+        if(!air(up),
+            pos = pos + [0,1,0];
+            continue()
+        );
+        return(block)
+    );
+    null
+);
+
+_rand_pos_around(pos, radius) -> (
+    loop(3,pos:_ += rand(2*radius)-radius);
+    pos
+)
