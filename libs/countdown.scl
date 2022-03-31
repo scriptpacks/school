@@ -2,6 +2,7 @@
 global_time = 600;
 global_start_time = system_info('world_time');
 
+_time_running() -> global_start_time!=null;
 _set_time(time) -> global_time = time;
 
 _time() -> global_time+global_start_time-system_info('world_time');

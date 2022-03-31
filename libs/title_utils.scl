@@ -12,3 +12,20 @@ _show_json_actionbar(player, json) -> (
         encode_json(json)
     ))
 );
+
+_show_block_title(player, block) -> (
+    item = if(
+        block=='lava','lava_bucket',
+        block=='water','water_bucket',
+        block=='tall_seagrass','seagrass',
+        block=='kelp_plan','kelp',
+        block=='frosted_ice','ice',
+        block=='powder_snow','powder_snow_bucket',
+        block
+    );
+    run(str('/title %s title ["",{"translate":"carpet-school.%s","font":"carpet-school:icon"},{"text":" %s","color":"gray","italic":true}]',
+        player~'command_name',
+        item,
+        block
+    ))
+);

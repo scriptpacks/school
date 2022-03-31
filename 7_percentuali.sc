@@ -26,19 +26,25 @@ import('school',
 import('countdown',
     '_start_countdown',
     '_stop_countdown',
+    '_countup_string',
     '_countdown_string',
     '_set_time',
     '_valid_time',
+    '_time_running',
     '_time'
 );
-import('title_utils','_show_text_actionbar','_show_json_actionbar');
+import('title_utils',
+    '_show_text_actionbar',
+    '_show_block_title',
+    '_show_json_actionbar'
+);
 import('streak','_add_streak','_get_streak');
 import('math_utils','_mcd');
 import('blocks_utils','_surface_block','_rand_pos_around');
 import('icons','_icon_item_json');
 
 _rispondi(int) -> _risposta(player(),int);
-_set_time(300);
+_set_time(100);
 _n_ep(7);
 global_calcolatrice = true;
 
@@ -194,12 +200,13 @@ domanda_percentuali(player) -> (
 __on_tick() -> (
     player = player();
     if(player,
-        if(!global_floor,
+        if(!global_floor && _time_running(),
             center = pos(player);
-            global_floor = _surface_block(_rand_pos_around(center,20));
+            global_floor = in_dimension(player~'dimension',_surface_block(_rand_pos_around(center,20)));
+            _show_block_title(player, global_floor);
         );
 
-        if(_time() > 600,
+        if(_valid_time() && _time() < -800,
             _stop_countdown();
             global_floor = null;
             _start_countdown();
@@ -207,35 +214,46 @@ __on_tick() -> (
         if(_valid_time(),
             pos1 = pos(player)-[0,0.1,0];
             pos2 = pos(player);
-            if(block(pos1) == global_floor || block(pos2) == global_floor,
+            if(in_dimension(player~'dimension',block(pos1) == global_floor || block(pos2) == global_floor),
                 _stop_countdown();
                 global_floor = null;
                 schedule(0, 'domanda_percentuali', player);
             )
         );
 
-        text=_countdown_string() || false;
+        down=_countdown_string() || '';
+        up=_countup_string(800) || '';
         if(
             global_floor,
-                icon = _icon_item_json(global_floor);
+                item = if(
+                    global_floor=='lava','lava_bucket',
+                    global_floor=='water','water_bucket',
+                    global_floor=='tall_seagrass','seagrass',
+                    global_floor=='kelp_plan','kelp',
+                    global_floor=='frosted_ice','ice',
+                    global_floor=='powder_snow','powder_snow_bucket',
+                    global_floor
+                );
+                icon = _icon_item_json(item);
+
                 json = [
                     {
-                        'text' -> text, 
-                        'color' -> 'red'
-                    },
-                    {
-                        'text' -> ' - '
+                        'text' -> if(down != '', down+' - ', 
+                                     up != '', up + ' - ',
+                                     ''), 
+                        'color' -> if(down != '', 'red', 'green')
                     },
                     icon,
                     {
                         'text' -> ' ('+global_floor+')',
-                        'color' -> 'light_gray'
+                        'color' -> 'gray'
                     }
                 ];
+                
                 _show_json_actionbar(player,json)
             , // elif
-            text,
-                _show_text_actionbar(player,text,'red')
+            down != '',
+                _show_text_actionbar(player,down,'red')
             
             , // else
                 _show_text_actionbar(player,'','red')
