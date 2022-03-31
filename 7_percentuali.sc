@@ -28,7 +28,8 @@ import('countdown',
     '_stop_countdown',
     '_countdown_string',
     '_set_time',
-    '_valid_time'
+    '_valid_time',
+    '_time'
 );
 import('title_utils','_show_text_actionbar','_show_json_actionbar');
 import('streak','_add_streak','_get_streak');
@@ -193,31 +194,37 @@ domanda_percentuali(player) -> (
 __on_tick() -> (
     player = player();
     if(player,
+        if(!global_floor,
+            center = pos(player);
+            global_floor = _surface_block(_rand_pos_around(center,20));
+        );
+
+        if(_time() > 600,
+            _stop_countdown();
+            global_floor = null;
+            _start_countdown();
+        );
         if(_valid_time(),
-            if(!global_floor,
-                center = pos(player);
-                global_floor = _surface_block(_rand_pos_around(center,20));
-            , // else
-                pos1 = pos(player)-[0,0.1,0];
-                pos2 = pos(player);
-                if(block(pos1) == global_floor || block(pos2) == global_floor,
-                    _stop_countdown();
-                    global_floor = null;
-                    schedule(0, 'domanda_percentuali', player);
-                )
+            pos1 = pos(player)-[0,0.1,0];
+            pos2 = pos(player);
+            if(block(pos1) == global_floor || block(pos2) == global_floor,
+                _stop_countdown();
+                global_floor = null;
+                schedule(0, 'domanda_percentuali', player);
             )
         );
 
         text=_countdown_string() || false;
         if(
-            text,
-                _show_text_actionbar(player,text,'red')
-            , // elif
             global_floor,
                 icon = _icon_item_json(global_floor);
                 json = [
                     {
-                        'text' -> ''
+                        'text' -> text, 
+                        'color' -> 'red'
+                    },
+                    {
+                        'text' -> ' - '
                     },
                     icon,
                     {
@@ -226,6 +233,10 @@ __on_tick() -> (
                     }
                 ];
                 _show_json_actionbar(player,json)
+            , // elif
+            text,
+                _show_text_actionbar(player,text,'red')
+            
             , // else
                 _show_text_actionbar(player,'','red')
         );
