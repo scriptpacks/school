@@ -5,3 +5,10 @@ _show_text_actionbar(player, text, color) -> (
         color
     ))
 );
+
+_show_json_actionbar(player, json) -> (
+    run(str('/title %s actionbar %s',
+        player~'command_name',
+        encode_json(json)
+    ))
+);
