@@ -112,7 +112,7 @@ _risposta(player,risposta) -> (
     if(risposta == null, return(false));
     
     if(global_risposta_libera,
-        risposta = lower(replace(risposta,' '));
+        risposta = lower(replace(replace(risposta,',','.'),' '));
         if(!risposta, return(false));
         _unfreeze(player);
         if(risposta == lower(global_risposta),
