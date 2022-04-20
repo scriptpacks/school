@@ -1,0 +1,19 @@
+// ATTRIBUTE UTILS
+_attribute(entity, attribute, ...variables) -> (
+    if(length(variables) == 0,
+        run(str('attribute %s %s base get',
+            entity~'command_name',
+            attribute
+        )):0;
+    , length(variables) == 1,
+        run(str('attribute %s %s base set %d',
+            entity~'command_name',
+            attribute,
+            variables:0
+        )):0;
+    , null
+    )
+);
+_get_max_health(player) -> _attribute(player, 'generic.max_health');
+_set_max_health(player, amount) -> _attribute(player, 'generic.max_health', amount);
+_add_max_health(player, amount) -> _attribute(player, 'generic.max_health', max(1,_attribute(player, 'generic.max_health') + amount));

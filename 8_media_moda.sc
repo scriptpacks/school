@@ -9,8 +9,7 @@ __config()->{
         {'source' -> '/libs/title_utils.scl'},
         {'source' -> '/libs/array_utils.scl'},
         {'source' -> '/libs/streak.scl'},
-        {'source' -> '/libs/math_utils.scl'},
-        {'source' -> '/libs/array_utils.scl'}
+        {'source' -> '/libs/math_utils.scl'}
     ],
     'resources' -> [
         {'source' -> '/resources/trash_item.json'},

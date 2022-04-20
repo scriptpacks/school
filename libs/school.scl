@@ -94,6 +94,10 @@ genera_domanda_multipla(player,calcolatrice,comando_risposta,domanda,risposte,su
     );
     if(type(domanda) == 'list',
         global_domanda = encode_json([...domanda, '\n', ...risposte_json]);
+    , // elif
+    type(domanda) == 'text',
+        domanda_json = decode_json(decode_json(encode_nbt(format('b ciao'),true)));
+        global_domanda = encode_json([...(domanda_json:'extra'), '\n', ...risposte_json])
     , // else
         global_domanda = encode_json([{'text' -> domanda}, '\n', ...risposte_json]);
     );
