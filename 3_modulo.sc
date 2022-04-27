@@ -96,6 +96,9 @@ __on_tick() -> (
     );
 );
 
+__on_player_disconnects(player, reason)-> (
+    _force_closing_screen(player);
+);
 __on_close() -> (
     _force_closing_screen(player());
 );
