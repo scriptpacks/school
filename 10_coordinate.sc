@@ -78,7 +78,10 @@ _penalita(player, r, corretta) -> (
 
 // COORDINATE
 domanda_coordinate(player) -> (
-    coordinate = map(pos(player()), round(_));
+    coordinate = if(global_difficolta>10,
+        map(pos(player()), round(_)),
+        map(range(3), if(rand(2),1,-1)*floor(rand(26)))
+    );
     global_offset = map(range(3), if(rand(2),1,-1)*floor(rand(26+global_difficolta*10))); 
     // lista di 3 numeri da -25 a 25 +- difficoltà*10
     
@@ -135,7 +138,7 @@ domanda_coordinate_2(player, coordinate, offset) -> (
     pairs = _shuffle(pairs(offset_map));
     args = reduce(pairs, [..._a, ..._],[]);
     domanda = ['Ti trovi a coordinate\n'
-        {'text'->str('(%d, %d, %d)\n\n',... coordinate),'bold'->true},
+        {'text'->str('(%d, %d, %d)\n\n',... arrivo),'bold'->true},
         str('Se prima ti eri mosso\n'+
         '%2$s blocchi sull\'asse delle %1$s, '+
         '%4$s sull\'asse delle %3$s, '+
@@ -194,7 +197,7 @@ domanda_coordinate_3(player, coordinate, offset) -> (
 // TEMPO FERMO
 global_max_fermo = 100;
 approssima(pos) -> map(pos, floor(_*100)/100);
-global_pos = approssima(pos(player()));
+if(player(), global_pos = approssima(pos(player())));
 global_tick_fermo = 0;
 fermo_da_troppo() -> global_tick_fermo > global_max_fermo;
 
@@ -224,7 +227,7 @@ __on_tick() -> (
     )    
 );
 
-__on_player_connects(player)-> global_tick_fermo = -400;
+__on_player_connects(player)-> global_tick_fermo = -800;
 
 __on_player_disconnects(player, reason)-> (
     _force_closing_screen(player);
