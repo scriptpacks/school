@@ -39,7 +39,7 @@ import('effects_utils','_r_positive_effect');
 _rispondi(int) -> _risposta(player(),int);
 _set_time(200);
 _n_ep(11);
-global_calcolatrice = yes;
+global_calcolatrice = true;
 
 // RICOMPENSA
 _ricompensa(player, r) -> (

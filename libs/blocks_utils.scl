@@ -1,3 +1,5 @@
+import('inventory_utils','_random_item_inventory');
+
 _surface_block(pos) -> (
     loop(255,
         block = block(pos);
@@ -18,4 +20,64 @@ _surface_block(pos) -> (
 _rand_pos_around(pos, radius) -> (
     loop(3,pos:_ += rand(2*radius)-radius);
     pos
-)
+);
+
+_block_to_item(block) -> (
+    block_name = str(block);
+    if(item_list()~block_name != null, return(block_name));
+    if(block_name~'potted' != null, return(replace(block_name, 'potted_', '')));
+    [x, y, z] = if(type(block) == 'block', pos(block), pos(player()));
+    dummy_y = -1000;
+    run(str('loot spawn %d %d %d mine %d %d %d', x, dummy_y, z, x, y, z));
+    item = entity_area('item', [x, dummy_y, z], [0.5, 0.5, 0.5]):0;
+    if(item, modify(item, 'remove'); return(item~'item':0));
+    return('air');
+);
+
+// RANDOM BLOCK ITEM AROUND
+_random_block_item_around(player) -> (
+    item = 'air';
+    while(!item || item=='air', 10,
+        block = _random_block_around(player);
+        item = _block_to_item(block);
+    );
+    if(!item || item == 'air',
+        item = if(
+            block=='lava','lava_bucket',
+            block=='water','water_bucket',
+            block=='tall_seagrass','seagrass',
+            block=='powder_snow','powder_snow_bucket',
+            item
+        )
+    );
+    if(!item || item == 'air',
+        item = _random_item_inventory(player)
+    );
+    if(item && item != 'air',
+        item,
+        rand(item_list())
+    )
+);
+
+// RANDOM BLOCK AROUND
+global_forbidden_blocks = ['air','barrirer','light','cave_air','void_air', 'infested_stone','nether_portal','fire'];
+global_deep = 0;
+_random_block_around(player) -> (
+    in_dimension(player~'dimension',
+        pos = if(type(player) == 'entity', pos(player), player);
+        blocks = {};
+        scan(pos,25,25,25, blocks:str(_) = _);
+        for(global_forbidden_blocks, delete(blocks:_));
+        if(k = keys(blocks),
+            global_deep=0;
+            blocks:rand(k),
+        
+        global_deep > 50,
+            rand(block_list()),
+            
+            pos1 = [pos:0+rand(100)-50,rand(32)+32,pos:2+rand(100)-50];
+            global_deep += 1;
+            _random_block_around(pos1);
+        )
+    )
+);

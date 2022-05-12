@@ -1,0 +1,186 @@
+global_item = 'warped_fungus_on_a_stick';
+_totem_id(item, count, nbt) -> (
+    if(item == global_item && nbt,
+        parse_nbt(nbt):'CustomModelData',
+        null
+    )
+);
+_totem_use(player, hand) -> (
+    inventory_set(player, if(hand=='mainhand',player~'selected_slot',-1),0);
+    particle('totem_of_undying',pos(player)+[0,player~'eye_height',0],100,0.5,0.3);
+    sound('item.totem.use',pos(player))
+);
+
+global_totems = {
+    -1 -> [5, 'Totem del Villager'],
+    1 ->  [10, 'Totem del Pipistrello'],
+    2 ->  [5, 'Totem del Blaze'],
+    3 ->  [5, 'Totem del Creeper'],
+    4 ->  [5, 'Totem dell\\\\\\\'Enderman'],
+    5 ->  [10,  'Totem del Ghast'],
+    6 ->  [5, 'Totem del Guardiano'],
+    7 ->  [0,  'Totem dell\\\\\\\'Evocatore'],
+    8 ->  [5, 'Totem dello Shulker'],
+    9 ->  [0,  'Totem dello Slime'],
+    10 -> [5, 'Totem del Ragno'],
+    11 -> [0,  'Totem del Polpo'],
+    12 -> [0,  'Totem di Steve'],
+    13 -> [0,  'Totem del Wither'],
+    14 -> [5, 'Totem del Golem'],
+    15 -> [5, 'Totem della Strega'], 
+    16 -> [1,  'Totem del Piglin'] 
+};
+global_totem_chances = map(sort(keys(global_totems)),
+    [_, a += global_totems:_:0]
+);
+
+_give_random_totem(player) -> (
+    rand = rand(global_totem_chances:(-1):1);
+    id = null;
+    for(global_totem_chances,
+        if(_:1 >= rand, id = _:0; break())
+    );
+    if(id!=null,
+        spawn('item', pos(player), str('{Item:{id:"%s",Count:1,tag:{display:{Name:\'{"text":"%s","italic":false,"color":"yellow"}\'},CustomModelData:%d}}}',
+            if(id == -1, 'totem_of_undying',global_item),
+            global_totems:id:1,
+            id
+        )),
+    );
+);
+
+_on_player_uses_item(player, item_tuple, hand)->(
+    if(
+      // TOTEM DEL BLAZE
+       _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==2 ||
+       _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==2,
+        _totem_use(player, hand);
+        modify(player,'may_fly',true);
+        modify(player,'effect','luck',600,0,true,false,false);
+        schedule(600, _(outer(player)) ->
+            if(player~'gamemode'=='survival',
+                modify(player,'may_fly',false)
+            )
+        )
+    , // TOTEM DEL CREEPER
+       _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==3 ||
+       _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==3,
+        _totem_use(player, hand);
+        explostion_pos = if(e = player~['trace',10,'exact'],
+            e - player~'look',
+            pos(player) + [0,player~'eye_height',0] + player~'look'*10
+        );
+        create_explosion(explostion_pos,5,'break',false,player,player);
+        modify(player,'effect','resistance',1,255,false,false,false);
+    , // TOTEM DELL'ENDERMAN
+       _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==4 ||
+       _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==4,
+        players = player('all');
+        delete(players,players~player());
+        if(!length(players), players=entity_list('living'));
+        _totem_use(player, hand);
+        modify(player,'pos',pos(rand(players)));
+        _totem_use(player, hand);
+    , // TOTEM DEL GHAST
+       _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==5 ||
+       _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==5,
+        _totem_use(player, hand);
+        modify(player,'tag','bisumto.ghast');
+        modify(player,'effect','luck',600,0,true,false,false);
+        schedule(600, _(outer(player)) -> modify(player, 'clear_tag', 'bisumto.ghast'));
+    , // TOTEM DEL GUARDIANO
+       _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==6 ||
+       _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==6,
+        _totem_use(player, hand);
+        modify(player,'effect','night_vision',600,0);
+    , // TOTEM DEL RAGNO
+       _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==10 ||
+       _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==10,
+        _totem_use(player, hand);
+        modify(player,'effect','speed',600,3);
+    , // TOTEM DEL WITHER
+       _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==13 ||
+       _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==13,
+        _totem_use(player, hand);
+        spawn('wither',pos(player));
+    , // TOTEM DEL GOLEM
+       _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==14 ||
+       _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==14,
+        _totem_use(player, hand);
+        modify(player,'effect','strength',600,1);
+        modify(player,'effect','resistance',600,1);
+    , // TOTEM DELLA STREGA
+       _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==15 ||
+       _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==15,
+        _totem_use(player, hand);
+        modify(player,'effect','invisibility',600,0);
+    , // TOTEM DEL PIGLIN
+       _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==16 ||
+       _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==16,
+        _totem_use(player, hand);
+        modify(player,'insta_build',true);
+        modify(player,'effect','luck',600,0,true,false,false);
+        schedule(600, _(outer(player)) ->
+            if(player~'gamemode'=='survival',
+                modify(player,'insta_build',false)
+            )
+        )
+    );
+);
+
+// TOTEM DELLO SHULKER
+global_inventory = null;
+_on_player_dies(player)->(
+    if(_totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==8 || 
+       _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==8,
+        _totem_use(player, hand);
+        
+        global_inventory = [];
+        loop(inventory_size(player),
+            item_tuple = inventory_get(player, _) || [0, 0, 0];
+            [item, count, nbt] = item_tuple;
+            global_inventory:_ = [count, item, nbt];
+        );
+        pos = pos(player);
+        schedule(0, _(outer(pos)) -> 
+            run(str('kill @e[type=item,x=%d,y=%d,z=%d,distance=..3,nbt={Age:0s}]',pos))
+        )
+    )
+);
+_on_player_respawns(player)->(
+    if(global_inventory,
+        schedule(0,_(outer(player)) ->
+            loop(inventory_size(player),
+                inventory_set(player, _, ...global_inventory:_)
+            )
+        )
+    )
+);
+
+// TOTEM GHAST
+_on_player_swings_hand(player, hand)->
+if(player~['has_tag','bisumto.ghast'],
+    _shoot(player);
+);
+_shoot(player) -> (
+    f=spawn('fireball', pos(player)+[0,player~'eye_height',0]+player~'look');
+    modify(f,'motion',player~'look');
+    schedule(30,_(outer(f))->modify(f,'remove'))
+);
+// TOTEM DEL PIPISTRELLO
+_on_player_interacts_with_entity(player, entity, hand)->
+if(entity~'type' == 'bat' && (
+    _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==1 ||
+    _totem_id(...(player~['holds',hand='offhand']||[null,null,null]))==1),
+    _totem_use(player, hand);
+    modify(player,'mount',entity);
+);
+_on_player_rides(player, forward, strafe, jumping, sneaking)->
+if((e=player~'mount') && e~'type'=='bat',
+    r = player~'head_yaw';
+    l = player~'look';
+    s = if(jumping,1,0.5);
+    modify(e,'body_yaw',r);
+    modify(e,'accelerate',l*s*forward);
+    modify(e,'accelerate',[cos(r),0,sin(r)]*s*strafe);
+)

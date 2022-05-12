@@ -19,4 +19,15 @@ _shuffle_inventory(player) -> (
             inventory_set(player, _i, 0)
         )
     )
-)
+);
+
+// RANDOM ITEM INVENTORY
+_random_item_inventory(p) -> (
+    items = {};
+    loop(inventory_size(p),
+        if(g = inventory_get(p,_),
+            items += g:0
+        )
+    );
+    if(k = keys(items), rand(k), null)
+);
