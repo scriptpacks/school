@@ -8,8 +8,6 @@ __config()->{
         {'source' -> '/libs/countdown.scl'},
         {'source' -> '/libs/title_utils.scl'},
         {'source' -> '/libs/array_utils.scl'},
-        {'source' -> '/libs/inventory_utils.scl'},
-        {'source' -> '/libs/blocks_utils.scl'},
         {'source' -> '/libs/totems.scl'},
         {'source' -> '/libs/icons.scl'},
         {'source' -> '/libs/streak.scl'}
@@ -34,12 +32,9 @@ import('countdown',
     '_time'
 );
 import('title_utils',
-    '_show_json_actionbar',
-    '_show_block_title'
+    '_show_text_actionbar'
 );
 import('icons','_icon_item_json');
-import('blocks_utils','_random_block_item_around','_random_block_around','_block_to_item');
-import('inventory_utils','_random_item_inventory');
 import('streak','_add_streak','_get_streak');
 import('array_utils','_shuffle');
 import('totems',
@@ -53,8 +48,8 @@ import('totems',
 );
 
 _rispondi(int) -> _risposta(player(),int);
-_set_time(global_time = 30*20);
-_n_ep(12);
+_set_time(global_time = 10*20);
+_n_ep(13);
 global_calcolatrice = true;
 
 // RICOMPENSA
@@ -72,7 +67,7 @@ _ricompensa(player, r) -> (
     _set_time(max(200,global_time - global_difficolta*10));
 
     // RICOMPENSA
-    _give_random_totem(player);
+    signal_event('ricompensa', player, [player, r]);
 
     _force_closing_screen(player)
 );
@@ -101,31 +96,64 @@ _penalita(player, r, corretta) -> (
     _set_time(max(200,global_time - global_difficolta*10));
     
     // PENALITA'
-    schedule(20, '_materializza', player, 2 + _get_streak());
+    signal_event('penitenza', player, [player, r, corretta]);
 
     _force_closing_screen(player)
 );
 
-// FIBONACCI
-_fibonacci(n,m) -> (
-    list = if(n>m,[m,n],[n,m]);
-    loop(rand(3)+2,
-        list += list:(-1)+list:(-2)
-    );
-    list
+// NOTAZIONE SCIENTIFICA
+domanda_notazione_scientifica(player) -> (
+    es = floor(rand(4));
+    if(
+        es == 0, domanda_1(player),
+        es == 1, domanda_3(player),
+        domanda_2(player)
+    )
 );
+global_apici = ['⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸','⁹'];
+notazione_scientifica(s,e) -> str('%.3f · 10%s',s,
+    join('',map(split(str(e)),
+        if(_ == '-', '⁻',
+           _ == 'n', 'ⁿ',
+           global_apici:number(_)
+        )
+    ))
+);
+domanda_1(player) -> (
+    s = floor(rand(1000+global_difficolta*100));
+    while(abs(s) >= 10, 100, s = s/10);
+    e = (-1)^floor(rand(2))*floor(rand(10+global_difficolta)+1);
+    print(s);
+    print(e);
 
-domanda_fibonacci(player) -> (
-    global_difficolta = max(global_difficolta,0);
-    list = _fibonacci(floor(rand(10+global_difficolta)),floor(rand(10+global_difficolta)+1));
-    index = floor(rand(length(list)));
-    risposta = list:index;
-    list:index = '?';
-    domanda = 'Completa la successione!\n\n' + join(', ',list);
+    genera_domanda_multipla(player, global_calcolatrice, str('/%s risposta ',system_info('app_name')),
+        'Il numero '+notazione_scientifica(s,e)+' è grande o piccolo?', // domanda
+        if(e>0,['grande','piccolo'],['piccolo','grande']), // risposte
+        _(p,r)->_ricompensa(p,r), // ricompensa
+        _(p,r,c)->_penalita(p,r,c) // penalità
+    );
+);
+domanda_2(player) -> (
+    s = (-1)^floor(rand(2))*floor(rand(1000+global_difficolta*100));
+    while(abs(s) >= 10, 100, s = s/10);
+    e = (-1)^floor(rand(2))*min(35,floor(rand(10+global_difficolta)+1));
 
     genera_domanda_libera(player, global_calcolatrice,
-        domanda, // domanda
-        risposta, // risposta
+        'A quanto corrisponde il seguente numero?\n'+notazione_scientifica(s,e), // domanda
+        s*10^e, // risposta
+        _(p,r)->_ricompensa(p,r), // ricompensa
+        _(p,r,c)->_penalita(p,r,c) // penalità
+    );
+);
+domanda_3(player) -> (
+    s = (-1)^floor(rand(2))*floor(rand(1000+global_difficolta*100));
+    while(abs(s) >= 10, 100, s = s/10);
+    e = (-1)^floor(rand(2))*min(35,floor(rand(10+global_difficolta)+1));
+
+    genera_domanda_libera(player, global_calcolatrice,
+        'Quale è l\'esponente "n" della seguente ugualianza?\n'+
+        (s*10^e)+'\n => ' +notazione_scientifica(s,'n'), // domanda
+        e, // risposta
         _(p,r)->_ricompensa(p,r), // ricompensa
         _(p,r,c)->_penalita(p,r,c) // penalità
     );
@@ -135,50 +163,17 @@ domanda_fibonacci(player) -> (
 __on_tick() -> (
     player = player();
     if(player,
-        if(player && player~'gamemode'!='survival', return());
-
-        has_item = inventory_find(player,global_item) != null;
-        if(global_item,
-            if((text=_countdown_string())!='', color='red',
-                (text=_countup_string(200))!='', color ='green',
-                text=''; color='white'
-            );
-            json_icon = _icon_item_json(global_item);
-            json_text = [
-                '',
-                json_icon,
-                {
-                    'text'->'('+global_item+') ',
-                    'color'->'light_gray'
-                },
-                {
-                    'text' -> text, 
-                    'color' -> color
-                },
-                if(has_item, {
-                    'text' -> ' ✔',
-                    'color' -> '#00FF00'
-                },'')
-            ];
-            _show_json_actionbar(player,json_text);
-
-            if(_valid_time() && !has_item,
-                global_item = null;
-                _stop_countdown();
-
-                in_dimension(player~'dimension',particle('block_marker barrier',pos(player)+[0,player~'eye_height',0]+player~'look',1,0.1,0.3));
-                schedule(10, 'domanda_fibonacci', player);
-
-            );
-        );
-       
-        if(_valid_time() && _time()<-200 || _time()>0 && !global_item,
-            _start_countdown();
-            global_item = in_dimension(player~'dimension',_random_block_item_around(player));
-            _show_block_title(player, global_item);
-        )
-    )    
+        text=_countdown_string() || '';
+        _show_text_actionbar(player,text,'red');
+    );
 );
+
+handle_event('domanda', _(player) -> (
+    if(_valid_time(),
+        _stop_countdown();
+       schedule(10, 'domanda_notazione_scientifica', player);
+    );
+));
 
 // CLOSE
 __on_player_disconnects(player, reason)-> (

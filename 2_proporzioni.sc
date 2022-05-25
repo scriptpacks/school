@@ -72,7 +72,7 @@ _penalita(player, r, corretta, entity) -> (
     
     // PENALITA'
     if(global_item,
-        run(str('/clear %s %s %d', player, ... global_item));
+        run(str('clear %s %s %d', player, ... global_item));
     );
 
     _force_closing_screen(player)
