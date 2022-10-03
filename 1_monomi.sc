@@ -9,7 +9,7 @@ __config()->{
         {'source' -> '/libs/countdown.scl'},
         {'source' -> '/libs/array_utils.scl'},
         {'source' -> '/libs/title_utils.scl'},
-        {'source' -> '/libs/item_utils.scl'},
+        {'source' -> '/libs/items_utils.scl'},
         {'source' -> '/libs/inventory_utils.scl'},
         {'source' -> '/libs/streak.scl'}
     ]
