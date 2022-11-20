@@ -40,6 +40,6 @@ Se si risponde correttamente, gli oggetti nell'inventario verranno incrementati 
 Se la risposta dovesse essere errata, gli oggetti nell'inventario verranno decrementati di una percentuale
 
 ### `8_media_moda.sc`
-Quando si salta, verrà posta un semplice esercizio sul calcolo della media o della moda.
+Quando si salta, verrà posta un semplice esercizio sul calcolo della media o della moda.<br/>
 Se si risponde correttamente, si otterrà un item raro.<br/>
 Se la risposta dovesse essere errata, si otterranno tanti item inutili.
