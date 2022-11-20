@@ -28,3 +28,18 @@ Se la risposta dovesse essere errata, si perde una % di un sottoinsieme di ogget
 Quando si piazza un blocco, viene mostrato un esercizio di cambio basi da risolvere.<br/>
 Se si risponde correttamente, si aggiungono dei blocchi allo stack corrente.<br/>
 Se la risposta dovesse essere errata, si piazzeranno tutti i blocchi dello stack corrente.
+
+### `6_pigreco.sc`
+Quando si interagisce con un blocco con un inventario, viene mostrato un esercizio sulle circonferenze.<br/>
+Se si risponde correttamente, si nel blocco verrà in serito un loot casuale.<br/>
+Se la risposta dovesse essere errata, si verrà teletrasportati casualmente.
+
+### `7_percentuali.sc`
+Quando si calpesta un blocco estratto casualmente, viene mostrata una semplice percentuale da risolvere.<br/>
+Se si risponde correttamente, gli oggetti nell'inventario verranno incrementati di una percentuale.<br/>
+Se la risposta dovesse essere errata, gli oggetti nell'inventario verranno decrementati di una percentuale
+
+### `8_media_moda.sc`
+Quando si salta, verrà posta un semplice esercizio sul calcolo della media o della moda.
+Se si risponde correttamente, si otterrà un item raro.<br/>
+Se la risposta dovesse essere errata, si otterranno tanti item inutili.
