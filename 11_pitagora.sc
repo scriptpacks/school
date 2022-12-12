@@ -90,7 +90,7 @@ global_terne_difficili = [[20,99,101],[60,91,109],[15,112,113],[44,117,125],[88,
 domanda_pitagora(player) -> (
     terna = if(global_difficolta>10,
         rand([...global_terne_difficili,...global_terne]),
-        rand(global_terne);
+        [...rand(global_terne)];
     );
 
     i = floor(rand(3));
@@ -186,7 +186,7 @@ __on_tick() -> (
 
 // reset conteggio
 __on_player_attacks_entity(player, entity)->(
-    if(entity ~ 'type' != global_last_mob,
+    if(entity ~ 'type' != global_last_mob:0,
         global_last_mob:0 = entity~'type';
         global_last_mob:1 = str(entity);
         global_tick_senza_picchiare = 0
