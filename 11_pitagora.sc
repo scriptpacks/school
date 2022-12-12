@@ -186,7 +186,7 @@ __on_tick() -> (
 
 // reset conteggio
 __on_player_attacks_entity(player, entity)->(
-    if(entity ~ 'type' != global_last_mob,
+    if(entity ~ 'type' != global_last_mob:0,
         global_last_mob:0 = entity~'type';
         global_last_mob:1 = str(entity);
         global_tick_senza_picchiare = 0
