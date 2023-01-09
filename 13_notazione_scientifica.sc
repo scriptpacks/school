@@ -38,7 +38,6 @@ import('icons','_icon_item_json');
 import('streak','_add_streak','_get_streak');
 import('array_utils','_shuffle');
 import('totems',
-    '_give_random_totem',
     '_on_player_uses_item',
     '_on_player_dies',
     '_on_player_respawns',
@@ -71,20 +70,7 @@ _ricompensa(player, r) -> (
 
     _force_closing_screen(player)
 );
-_materializza(player,r) -> (
-    pos = pos(player);
-    for(range(-r,r), x=_; for(range(-r,r), y=_; for(range(-r,r), z=_;
-        pos1 = pos+[x,y,z];
-        ra = rand(dist = _euclidean(pos, pos1));
-        if(dist >2 && ra<r,
-            schedule(dist + floor(rand(dist+1)), _(outer(pos1),outer(player))->(
-                if(!rand(3),
-                    place_item(rand(item_list()),...pos1,'down',true)
-                )
-            ))
-        )
-    )))
-);
+
 _penalita(player, r, corretta) -> (
     particle('wax_on', pos(player)+[0,player~'eye_height',0]+player~'look');
     print(player, format('#ffdd00 Accidenti! La risposta corretta era '+corretta));
