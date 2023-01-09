@@ -70,7 +70,7 @@ _on_player_uses_item(player, item_tuple, hand)->(
             e - player~'look',
             pos(player) + [0,player~'eye_height',0] + player~'look'*10
         );
-        create_explosion(explostion_pos,5,'break',false,player,player);
+        create_explosion(explostion_pos,5,'destroy',false,player,player);
         modify(player,'effect','resistance',1,255,false,false,false);
     , // TOTEM DELL'ENDERMAN
        _totem_id(...(player~['holds',hand='mainhand']||[null,null,null]))==4 ||
