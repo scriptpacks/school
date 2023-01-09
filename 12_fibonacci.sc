@@ -51,6 +51,7 @@ import('totems',
     '_on_player_interacts_with_entity',
     '_on_player_swings_hand'
 );
+import('math','_euclidean');
 
 _rispondi(int) -> _risposta(player(),int);
 _set_time(global_time = 30*20);
@@ -193,8 +194,14 @@ __on_start() -> (
 
 // TOTEM
 __on_player_uses_item(player, item_tuple, hand)->_on_player_uses_item(player, item_tuple, hand);
-__on_player_dies(player)->_on_player_dies(player);
-__on_player_respawns(player)->_on_player_respawns(player);
+__on_player_dies(player)->(
+    _on_player_dies(player);
+    _stop_countdown()
+);
+__on_player_respawns(player)->(
+    _on_player_respawns(player);
+    _start_countdown()
+);
 __on_player_rides(player, forward, strafe, jumping, sneaking)->_on_player_rides(player, forward, strafe, jumping, sneaking);
 __on_player_interacts_with_entity(player, entity, hand)->_on_player_interacts_with_entity(player, entity, hand);
 __on_player_swings_hand(player, hand)->_on_player_swings_hand(player, hand);
