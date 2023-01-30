@@ -49,7 +49,7 @@ import('totems',
 _rispondi(int) -> _risposta(player(),int);
 _set_time(global_time = 10*20);
 _n_ep(15);
-global_calcolatrice = false;
+global_calcolatrice = true;
 
 // RICOMPENSA
 _ricompensa(player, r) -> (
@@ -125,7 +125,10 @@ is_prime(n) -> (
     if(n == 2, return(true));
     if(n % 2 == 0, return(false));
     if(n < 2500, 
-        if(global_primi~n!=null,return(true)),
+        if(global_primi~n!=null,
+            return(true), 
+            return(fakse)
+        ),
     // else
         c_for(i=3; i<=n/2; i+=2,
             if(n % i == 0, return(false));
@@ -136,8 +139,8 @@ is_prime(n) -> (
 domanda_1(player) -> (
     // E' primo?
     if(rand(2),
-        numero = floor(rand(100*global_difficolta+100))+2,
-        numero = rand(global_primi)
+        numero = floor(rand(10*global_difficolta+100))+2,
+        numero = rand(slice(global_primi,0,10+2*global_difficolta))
     );
     risposte = if(is_prime(numero), ['Sì', 'No'], ['No', 'Sì']);
 
@@ -150,7 +153,7 @@ domanda_1(player) -> (
 );
 domanda_2(player) -> (
     // E' divisibile per ...?
-    numero = floor(rand(100*global_difficolta+100))+2;
+    numero = floor(rand(10*global_difficolta+100))+2;
     divisore = floor(rand(10*global_difficolta+10))+2;
     risposte = if(numero%divisore==0, ['Sì', 'No'], ['No', 'Sì']);
 
@@ -172,7 +175,7 @@ __on_tick() -> (
 );
 
 handle_event('domanda', _(player) -> (
-    if(_valid_time(),
+    if(_valid_time() && player~'pose'!='dying',
         _stop_countdown();
        schedule(10, 'domanda_primi', player);
     );
@@ -189,10 +192,19 @@ __on_start() -> (
     _force_closing_screen(player());
 );
 
+__on_player_dies(player)->(
+    _force_closing_screen(player());
+    _stop_countdown();
+    _on_player_dies(player);
+);
+
+__on_player_respawns(player)->(
+    _start_countdown();
+    _on_player_respawns(player);
+);
+
 // TOTEM
 __on_player_uses_item(player, item_tuple, hand)->_on_player_uses_item(player, item_tuple, hand);
-__on_player_dies(player)->_on_player_dies(player);
-__on_player_respawns(player)->_on_player_respawns(player);
 __on_player_rides(player, forward, strafe, jumping, sneaking)->_on_player_rides(player, forward, strafe, jumping, sneaking);
 __on_player_interacts_with_entity(player, entity, hand)->_on_player_interacts_with_entity(player, entity, hand);
 __on_player_swings_hand(player, hand)->_on_player_swings_hand(player, hand);
