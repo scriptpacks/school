@@ -110,7 +110,7 @@ domanda_frequenza(player) -> (
     // numero a caso di secondi
     periodo_da = floor(rand(100*global_difficolta+100))+2;
     // secondi * 1 / 60 = minuti
-    periodo_a = floor(periodo_da * misura_da:1 / misura_a:1);
+    periodo_a = periodo_da * misura_da:1 / misura_a:1;
 
     if(periodo_a < 1,
        
