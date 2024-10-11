@@ -140,19 +140,27 @@ _risposta(player,risposta) -> (
 // SCREENS
 _apri_domanda(player) -> (
     global_screen = global_screen_domanda = create_screen(player,'lectern','Domanda #'+global_n_ep+'.'+global_n_domanda,'_azioni_domanda');
-    testo_domanda = encode_nbt({
-        'pages'-> (
-            p = [];
-            if(global_calcolatrice_abilitata, p += 'CALCOLATRICE'; page = 1);
-            p += global_domanda;
-            if(global_risposta_libera, p += 'RISPOSTA');
-            p
-        ),
-        'author'->'-',
-        'title'->'-',
-        'resolved'->1
-    });
-    inventory_set(global_screen_domanda,0,1,'written_book',testo_domanda);
+    book_components = {
+        'components' -> {
+            'written_book_content' -> {
+                'pages' -> (
+                    p = [];
+                    if(global_calcolatrice_abilitata, p += 'CALCOLATRICE'; page = 1);
+                    p += global_domanda;
+                    if(global_risposta_libera, p += 'RISPOSTA');
+                    p
+                ),
+                'author' ->'-',
+                'title' -> {
+                    'raw' -> '-'
+                },
+                'resolved' -> true
+            }
+        },
+        'id' -> 'written_book',
+        'count' -> 1
+    };
+    inventory_set(global_screen_domanda,0,1,'written_book',encode_nbt(book_components,true));
     screen_property(global_screen_domanda,'page',page);
 );
 
