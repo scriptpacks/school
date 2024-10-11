@@ -2,5 +2,5 @@ _icon_item_json(item) -> {
     'translate' -> 'tryashtar.shulker_preview.item.minecraft:'+item+'.0',
     'font' -> 'tryashtar.shulker_preview:preview',
     'color' -> '#ffffff',
-    'fallback' -> "6"
+    'fallback' -> '6'
 };

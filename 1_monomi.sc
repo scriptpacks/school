@@ -57,7 +57,7 @@ _ricompensa(player, r, entity) -> (
     // RICOMPENSA
     if(entity,modify(entity, 'pickup_delay', 0));
     if(global_premio,
-        nbt = nbt(str('{Item:{id:"%s",Count:%d}}',global_premio,floor(rand(_get_streak()))+1));
+        nbt = nbt(str('{Item:{id:"%s",count:%d}}',global_premio,floor(rand(_get_streak()))+1));
         nbt:'Owner' = player~'nbt':'UUID';
         spawn('item', pos(player), nbt)
     );
