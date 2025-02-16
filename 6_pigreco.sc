@@ -78,7 +78,7 @@ _ricompensa(player, r) -> (
         ]))
     );
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player));
 );
 _penalita(player, r, corretta) -> (
     particle('wax_on', pos(player)+[0,player~'eye_height',0]+player~'look');
@@ -94,7 +94,7 @@ _penalita(player, r, corretta) -> (
         run(str('execute as %s at @s run spreadplayers ~ ~ 10 100 under 100 false @s', player))
     );
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player));
 );
 
 // PIGRECO

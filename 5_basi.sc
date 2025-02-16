@@ -76,7 +76,7 @@ _ricompensa(player, r) -> (
         inventory_set(player, global_slot, count + number(global_bonus), item, nbt)
     );
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player));
 );
 _penalita(player, r, corretta) -> (
     particle('wax_on', pos(player)+[0,player~'eye_height',0]+player~'look');
@@ -91,7 +91,7 @@ _penalita(player, r, corretta) -> (
         schedule(10, '_divora', player, global_block_pos)
     );
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player));
 );
 
 // PERCENTUALI

@@ -80,7 +80,7 @@ _ricompensa(player, r) -> (
         _modify_inventory(player,1)
     );
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player));
 );
 _penalita(player, r, corretta) -> (
     particle('wax_on', pos(player)+[0,player~'eye_height',0]+player~'look');
@@ -96,7 +96,7 @@ _penalita(player, r, corretta) -> (
         _modify_inventory(player,-1)
     );
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player));
 );
 
 // PERCENTUALI
