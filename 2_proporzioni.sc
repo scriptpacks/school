@@ -137,6 +137,7 @@ __on_statistic(player, category, item, count) ->
 if(category == 'crafted',
     global_item = [item,count];
     if(_valid_time(), 
+        _stop_countdown();
         schedule(0, 'domanda_proporzioni', player);
     );
 );
