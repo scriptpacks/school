@@ -71,7 +71,7 @@ _penalita(player, r, corretta) -> (
     // PENALITA'
     _shuffle_inventory(player);
 
-    _schedule(0, _(outer(player)) -> _force_closing_screen(player));
+    schedule(0, _(outer(player)) -> _force_closing_screen(player));
 );
 
 // MODULO
