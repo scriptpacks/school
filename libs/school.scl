@@ -134,6 +134,8 @@ _risposta(player,risposta) -> (
         )
     );
     
+    _force_closing_screen(player);
+    
     true
 );
 
@@ -198,7 +200,7 @@ _azioni_risposta(screen, player, action, data) -> (
     if(action == 'pickup' && data:'slot' == 2,
         renamed_item = inventory_get(screen,2);
         nbt = renamed_item:2;
-        risposta = parse_nbt(nbt:'display.Name'):'text';
+        risposta = parse_nbt(nbt:'components.minecraft:custom_name');
         if(_risposta(player, risposta), close_screen(screen));
     , data:'slot' >= 3,
         _apri_domanda(player);
@@ -670,28 +672,33 @@ global_heads = {
 };
 _nbt_teste(valore) -> (
     ret = encode_nbt({
-        'SkullOwner' -> {    
-            'Properties' -> {
-                'textures' -> [{
-                    'Value' -> encode_b64(encode_json({
-                        'textures' -> {
-                            'SKIN' -> {
-                                'url' -> 'http://textures.minecraft.net/texture/'+valore
+        'components' -> {
+            'profile' -> {    
+                'properties' -> [{
+                    'name' -> 'textures',
+                    'value' -> encode_b64(
+                        encode_json({
+                            'textures' -> {
+                                'SKIN' -> {
+                                    'url' -> 'http://textures.minecraft.net/texture/'+valore
+                                }
                             }
-                        }
-                    }))
+                        })
+                    )
                 }]
             }
-        }
+        },
+        'id' -> 'player_head',
+        'count' -> 1
     });
     mk = spawn('marker',pos(player()));
-    ret:'SkullOwner.Id' = mk~'nbt':'UUID';
+    ret:'components.profile.id' = mk~'nbt':'UUID';
     modify(mk,'remove');
     ret
 );
 _testa_bottone(carattere, nome) -> (
     nbt = _nbt_teste(global_heads:'white':carattere);
-    nbt:'display.Name' = encode_nbt(encode_json({'text' -> nome}));
+    nbt:'components.custom_name' = encode_nbt(encode_json({'text' -> nome}));
     ['player_head', 1, nbt]
 );
 
