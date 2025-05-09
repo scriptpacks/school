@@ -54,7 +54,7 @@ _ricompensa(player, r) -> (
 
     // RICOMPENSA
     cute_mobs = ['allay','dolphin','axolotl','sniffer','armadillo'];
-    schedule(1, _(outer(player)) -> spawn(rand(cute_mobs),pos(player)));
+    schedule(1, _(outer(player), outer(cute_mobs)) -> spawn(rand(cute_mobs),pos(player)));
 
     schedule(0, _(outer(player)) -> _force_closing_screen(player))
 );
