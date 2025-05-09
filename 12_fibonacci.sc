@@ -75,7 +75,7 @@ _ricompensa(player, r) -> (
     // RICOMPENSA
     _give_random_totem(player);
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player))
 );
 _materializza(player,r) -> (
     pos = pos(player);
@@ -104,7 +104,7 @@ _penalita(player, r, corretta) -> (
     // PENALITA'
     schedule(20, '_materializza', player, 2 + _get_streak());
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player))
 );
 
 // FIBONACCI

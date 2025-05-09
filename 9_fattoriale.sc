@@ -55,7 +55,7 @@ _ricompensa(player, r) -> (
     // RICOMPENSA
     _add_max_health(player, global_quanto);
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player))
 );
 _penalita(player, r, corretta) -> (
     particle('wax_on', pos(player)+[0,player~'eye_height',0]+player~'look');
@@ -69,7 +69,7 @@ _penalita(player, r, corretta) -> (
     // PENALITA'
     _add_max_health(player, -global_quanto);
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player))
 );
 
 // FATTORIALE

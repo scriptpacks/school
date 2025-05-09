@@ -68,7 +68,7 @@ _ricompensa(player, r) -> (
     // RICOMPENSA
     signal_event('ricompensa', player, [player, r]);
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player))
 );
 
 _penalita(player, r, corretta) -> (
@@ -84,7 +84,7 @@ _penalita(player, r, corretta) -> (
     // PENALITA'
     signal_event('penitenza', player, [player, r, corretta]);
 
-    _force_closing_screen(player)
+    schedule(0, _(outer(player)) -> _force_closing_screen(player))
 );
 
 // PREFISSI
